@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /assets/svg/
+Disallow: /*.py$
+Disallow: /*.md$
+
+Sitemap: https://dakble.com/sitemap.xml
