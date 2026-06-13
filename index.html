@@ -94,13 +94,14 @@
 body {
   font-family: 'Outfit', sans-serif;
   background: #18191B;
-  display: flex;
-  justify-content: center;
+  display: block;
   overflow-x: hidden;
 }
+html { scroll-behavior: smooth; }
 
 .app {
   width: var(--width);
+  margin: 0 auto;
   padding-top: 72px;
   transform-origin: center top;
   background: var(--bg-page);
