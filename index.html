@@ -457,18 +457,15 @@ html { scroll-behavior: smooth; }
    Mobile (<=480px): compact single-column
    ========================================== */
 
-/* --- Desktop scale boundary: use scale above 768px --- */
-@media (min-width: 769px) {
-  .app { width: var(--width); }
-}
-
 /* ==========================================
    MOBILE: Independent mobile-first design
    Not a scaled-down desktop — purpose-built for touch
    ========================================== */
 @media (max-width: 768px) {
   body { background: var(--bg-page); overflow-x: hidden; }
-  .app { width: 100% !important; transform: none !important; margin-bottom: 0 !important; min-height: auto; }
+  .app { width: 100% !important; margin: 0 !important; padding-top: 0 !important; transform: none !important; min-height: auto; }
+  /* ── Hide zoom controls on mobile ── */
+  .zoom-controls { display: none !important; }
 
   /* ── Navigation ── */
   .nav { position: sticky; top: 0; left: 0; transform: none; width: 100%; max-width: 100%; height: auto; padding: 14px 18px; background: rgba(255,255,255,0.97); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.06); z-index: 200; }
@@ -752,6 +749,9 @@ html { scroll-behavior: smooth; }
 
   .lightbox-close { top: 10px; right: 12px; }
   .lightbox-arrow { display: none; }
+
+  /* Prevent WhatsApp button from overlapping footer */
+  .copy { padding-bottom: 80px; }
 }
 
 /* ── Floating WhatsApp Button ── */
@@ -775,9 +775,6 @@ html { scroll-behavior: smooth; }
 .zoom-btn:active { background: #E5E5E5; }
 .zoom-level { font-size: 12px; font-weight: 600; color: var(--text-mid); min-width: 42px; text-align: center; letter-spacing: 0.5px; }
 .zoom-reset { font-size: 14px; }
-@media (max-width: 768px) {
-  .zoom-controls { display: none; }
-}
 
 @media (max-width:480px) {
   .wa-float { bottom:16px; right:16px; width:54px; height:54px; }
@@ -1638,6 +1635,8 @@ html { scroll-behavior: smooth; }
       baseScale = 1;
       app.style.transform = 'none';
       app.style.width = '100%';
+      app.style.margin = '0px';
+      app.style.paddingTop = '0px';
       app.style.marginBottom = '0px';
     }
   }
