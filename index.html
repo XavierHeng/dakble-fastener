@@ -101,6 +101,7 @@ body {
 
 .app {
   width: var(--width);
+  padding-top: 72px;
   transform-origin: center top;
   background: var(--bg-page);
   min-height: 100vh;
@@ -108,8 +109,8 @@ body {
   flex-direction: column;
 }
 
-/* ===== NAVIGATION (fixed) ===== */
-.nav { width: 100%; height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; background: var(--white); flex-shrink: 0; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #F0F0F0; }
+/* ===== NAVIGATION (fixed above transform container) ===== */
+.nav { position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: var(--width); height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; background: rgba(255,255,255,0.97); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 200; border-bottom: 1px solid #F0F0F0; }
 .nav-logo { display: flex; align-items: center; gap: 12px; cursor: pointer; }
 .nav-logo-mark { width: 8px; height: 32px; background: var(--text-dark); border-radius: 2px; }
 .nav-logo-text { font-size: 16px; font-weight: 700; color: var(--text-dark); letter-spacing: 1px; }
@@ -191,11 +192,9 @@ body {
 
 .gallery-carousel-wrap { position: relative; margin: 0 -4px; }
 .gallery-carousel-track { display: flex; gap: 12px; padding: 0 8px; transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); will-change: transform; }
-.gallery-card { min-width: 280px; height: 360px; flex-shrink: 0; border-radius: 8px; overflow: hidden; position: relative; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; }
-.gallery-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.12); }
+.gallery-card { min-width: 280px; height: 360px; flex-shrink: 0; border-radius: 8px; overflow: hidden; position: relative; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s, opacity 0.2s; }
+.gallery-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.12); opacity: 0.92; }
 .gallery-card-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.gallery-card { cursor: pointer; transition: opacity 0.2s; }
-.gallery-card:hover { opacity: 0.88; }
 
 /* Lightbox */
 .lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; }
@@ -471,7 +470,7 @@ body {
   .app { width: 100% !important; transform: none !important; margin-bottom: 0 !important; min-height: auto; }
 
   /* ── Navigation ── */
-  .nav { width: 100%; height: auto; padding: 14px 18px; background: rgba(255,255,255,0.97); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.06); position: sticky; top: 0; }
+  .nav { position: sticky; top: 0; left: 0; transform: none; width: 100%; max-width: 100%; height: auto; padding: 14px 18px; background: rgba(255,255,255,0.97); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.06); z-index: 200; }
   .nav-logo { gap: 8px; }
   .nav-logo-mark { height: 26px; width: 7px; }
   .nav-logo-text { font-size: 14px; letter-spacing: 1px; }
@@ -684,7 +683,7 @@ body {
    SMALL MOBILE: <= 480px — compact tuning
    ========================================== */
 @media (max-width: 480px) {
-  .nav { padding: 10px 14px; }
+  .nav { position: sticky; top: 0; left: 0; transform: none; width: 100%; max-width: 100%; padding: 10px 14px; }
   .nav-logo-text { display: none; }
   .nav-links { gap: 12px; }
   .nav-links a { font-size: 12px; }
@@ -767,6 +766,18 @@ body {
 }
 .wa-tooltip { position:absolute; right:72px; background:#fff; color:#333; padding:8px 14px; border-radius:8px; font-size:13px; font-weight:600; white-space:nowrap; box-shadow:0 2px 12px rgba(0,0,0,.12); opacity:0; pointer-events:none; transition:opacity .25s; }
 .wa-float:hover .wa-tooltip { opacity:1; }
+
+/* ===== ZOOM CONTROLS (desktop only, bottom-right) ===== */
+.zoom-controls { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid #E5E5E5; border-radius: 12px; padding: 6px 8px; z-index: 199; box-shadow: 0 4px 20px rgba(0,0,0,0.08); user-select: none; }
+.zoom-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid transparent; background: transparent; cursor: pointer; font-size: 18px; font-weight: 600; color: var(--text-dark); display: flex; align-items: center; justify-content: center; transition: all 0.15s; line-height: 1; }
+.zoom-btn:hover { background: #F4F4F5; border-color: #E5E5E5; }
+.zoom-btn:active { background: #E5E5E5; }
+.zoom-level { font-size: 12px; font-weight: 600; color: var(--text-mid); min-width: 42px; text-align: center; letter-spacing: 0.5px; }
+.zoom-reset { font-size: 14px; }
+@media (max-width: 768px) {
+  .zoom-controls { display: none; }
+}
+
 @media (max-width:480px) {
   .wa-float { bottom:16px; right:16px; width:54px; height:54px; }
   .wa-float svg { width:28px; height:28px; }
@@ -781,10 +792,8 @@ body {
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
 </a>
 
-<div class="app" id="app">
-
-  <!-- NAVIGATION -->
-  <nav class="nav">
+  <!-- NAVIGATION (fixed, outside transform container) -->
+  <nav class="nav" id="topNav">
     <div class="nav-logo" data-nav="home" style="cursor:pointer">
       <div class="nav-logo-mark"></div>
       <span class="nav-logo-text">DAKBLE PRECISION HARDWARE</span>
@@ -803,6 +812,8 @@ body {
       <span class="inactive-lang">中文</span>
     </div>
   </nav>
+
+<div class="app" id="app">
 
   <!-- PAGE CONTENT -->
   <div class="page-content">
@@ -1583,6 +1594,14 @@ body {
   <span class="lightbox-counter" id="lightbox-counter"></span>
 </div>
 
+<!-- Zoom Controls (desktop only) -->
+<div class="zoom-controls">
+  <button class="zoom-btn" onclick="zoomOut()" title="Zoom out">−</button>
+  <span class="zoom-level">100%</span>
+  <button class="zoom-btn" onclick="zoomIn()" title="Zoom in">+</button>
+  <button class="zoom-btn zoom-reset" onclick="zoomReset()" title="Reset zoom">↺</button>
+</div>
+
 <script>
 (function() {
 
@@ -1603,15 +1622,19 @@ body {
   })();
 
   // ---- Scale ----
+  var baseScale = 1;
+  var currentZoom = 100;
   function resizeApp() {
     var winW = window.innerWidth;
     if (winW >= 768) {
-      var s = winW / W;
+      baseScale = Math.min(winW / W, 1);
+      var s = baseScale * (currentZoom / 100);
       app.style.transform = 'scale(' + s + ')';
       app.style.width = W + 'px';
       app.style.marginBottom = -(app.offsetHeight * (1 - s)) + 'px';
     } else {
       // Mobile: no scale, use native responsive CSS
+      baseScale = 1;
       app.style.transform = 'none';
       app.style.width = '100%';
       app.style.marginBottom = '0px';
@@ -1620,6 +1643,8 @@ body {
   window.addEventListener('resize', resizeApp);
   window.addEventListener('load', resizeApp);
   resizeApp();
+
+  var carousels = {};
 
   // ---- Switch page (pure logic, no side effects) ----
   function switchPage(page) {
@@ -2278,7 +2303,6 @@ body {
   });
 
   // ---- Product Carousel Auto-scroll ----
-  var carousels = {};
   function initCarousel(wrap) {
     if (!wrap) return;
     var id = wrap.id;
@@ -2345,6 +2369,29 @@ body {
 
   var savedLang = localStorage.getItem('lang');
   if (savedLang === 'zh') applyLang('zh');
+
+  // ===== ZOOM CONTROLS =====
+  var zoomStep = 10;
+  var zoomMin = 50;
+  var zoomMax = 200;
+
+  var zoomEl = document.querySelector('.zoom-level');
+
+  function applyZoom(z) {
+    currentZoom = Math.max(zoomMin, Math.min(zoomMax, z));
+    var s = baseScale * (currentZoom / 100);
+    app.style.transform = 'scale(' + s + ')';
+    app.style.marginBottom = -(app.offsetHeight * (1 - s)) + 'px';
+    if (zoomEl) zoomEl.textContent = currentZoom + '%';
+  }
+
+  function zoomIn()  { applyZoom(currentZoom + zoomStep); }
+  function zoomOut() { applyZoom(currentZoom - zoomStep); }
+  function zoomReset() { applyZoom(100); }
+
+  window.zoomIn = zoomIn;
+  window.zoomOut = zoomOut;
+  window.zoomReset = zoomReset;
 
 })();
 </script>
