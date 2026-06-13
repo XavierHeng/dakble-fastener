@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>满屏方案对比预览 - Dakble Fastener</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Outfit', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: #0F0F13;
+  color: #fff;
+  min-height: 100vh;
+}
+
+/* Header */
+.preview-header {
+  text-align: center;
+  padding: 48px 24px 0;
+}
+.preview-header h1 {
+  font-size: 36px;
+  font-weight: 900;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #2563EB, #8B5CF6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.preview-header p {
+  font-size: 14px;
+  color: #71717A;
+  max-width: 600px;
+  margin: 0 auto 12px;
+  line-height: 1.6;
+}
+
+/* Width selector */
+.width-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px;
+  flex-wrap: wrap;
+}
+.width-btn {
+  padding: 10px 24px;
+  border: 2px solid #292932;
+  border-radius: 8px;
+  background: #18181B;
+  color: #A1A1A8;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.width-btn:hover { border-color: #2563EB; color: #fff; }
+.width-btn.active { background: #2563EB; border-color: #2563EB; color: #fff; }
+
+/* Grid */
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 8px 20px 20px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+.preview-col {
+  background: #18181B;
+  border-radius: 12px;
+  border: 1px solid #292932;
+  overflow: hidden;
+}
+.col-header {
+  background: #1A1A21;
+  padding: 12px 16px;
+  border-bottom: 1px solid #292932;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.col-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.col-badge {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.badge-current { background: #374151; color: #9CA3AF; }
+.badge-easy { background: #1E3A5F; color: #60A5FA; }
+.badge-pro { background: #3B1F5F; color: #A78BFA; }
+.col-desc {
+  font-size: 11px;
+  color: #71717A;
+  text-align: right;
+  line-height: 1.4;
+}
+
+/* Viewport window */
+.viewport {
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  background: #0F0F13;
+  border-bottom: 1px solid #292932;
+  transition: width 0.4s ease;
+}
+.viewport::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 20px;
+  background: #292932;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+.viewport-inner {
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 440px;
+  margin-top: 0;
+  background: #FAFAFA;
+}
+
+/* Site mock */
+.site-mock {
+  font-family: 'Outfit', sans-serif;
+  background: #FAFAFA;
+  min-height: 100%;
+}
+/* Nav */
+.mock-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 40px;
+  background: #fff;
+  border-bottom: 1px solid #F0F0F0;
+}
+.mock-nav-logo {
+  font-size: 14px;
+  font-weight: 700;
+  color: #09090B;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mock-nav-logo::before {
+  content: '';
+  width: 6px; height: 24px;
+  background: #09090B;
+  border-radius: 2px;
+  display: inline-block;
+}
+.mock-nav-links {
+  display: flex;
+  gap: 24px;
+  font-size: 11px;
+  color: #71717A;
+}
+
+/* Hero */
+.mock-hero {
+  display: flex;
+  height: 240px;
+  background: #18191B;
+}
+.mock-hero-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+  gap: 12px;
+}
+.mock-hero-tag {
+  font-size: 9px;
+  font-weight: 600;
+  color: #71717A;
+  letter-spacing: 1px;
+}
+.mock-hero-title {
+  font-size: 32px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.1;
+}
+.mock-hero-sub {
+  font-size: 12px;
+  color: #A1A1A8;
+  max-width: 320px;
+  line-height: 1.5;
+}
+.mock-hero-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 28px;
+  background: #2563EB;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+.mock-hero-img {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1E293B, #0F172A);
+  color: #475569;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* Stats */
+.mock-stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 36px 40px;
+  background: #fff;
+}
+.mock-stat {
+  text-align: center;
+}
+.mock-stat-num {
+  font-size: 28px;
+  font-weight: 900;
+  color: #09090B;
+}
+.mock-stat-label {
+  font-size: 10px;
+  color: #71717A;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Products */
+.mock-section {
+  padding: 48px 40px;
+}
+.mock-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #2563EB;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.mock-section-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: #09090B;
+  margin: 6px 0 24px;
+}
+.mock-products {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.mock-product-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  background: #fff;
+  border: 1px solid #F0F0F0;
+  gap: 12px;
+}
+.mock-product-idx {
+  font-size: 11px;
+  font-weight: 700;
+  color: #2563EB;
+  min-width: 24px;
+}
+.mock-product-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #09090B;
+  flex: 1;
+}
+.mock-product-arrow { color: #D4D4D8; font-size: 12px; }
+
+/* Footer */
+.mock-footer {
+  display: flex;
+  padding: 32px 40px;
+  gap: 32px;
+  background: #09090B;
+  font-size: 11px;
+  color: #71717A;
+  justify-content: space-between;
+}
+
+/* Scheme-specific overrides */
+/* Scheme A: scale transform */
+.scheme-a .mock-app {
+  width: 1440px;
+  transform-origin: top left;
+  transform: scale(var(--sa));
+}
+
+/* Scheme B: fluid */
+.scheme-b .mock-app {
+  width: 100%;
+}
+.scheme-b .mock-hero {
+  height: auto;
+  min-height: 240px;
+}
+.scheme-b .mock-stats {
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.scheme-b .mock-products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+}
+.scheme-b .mock-product-row {
+  border-radius: 8px;
+}
+
+/* Width badge on viewport */
+.viewport-width {
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: #71717A;
+  z-index: 11;
+  background: #292932;
+  padding: 0 8px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  border-radius: 3px;
+  font-family: monospace;
+}
+
+/* Notes at bottom */
+.col-notes {
+  padding: 14px 16px;
+  background: #1A1A21;
+  font-size: 11px;
+  color: #71717A;
+  line-height: 1.6;
+  border-top: 1px solid #292932;
+}
+.col-notes span { color: #A1A1A8; font-weight: 600; }
+
+/* Decision panel */
+.decision-panel {
+  max-width: 1600px;
+  margin: 0 auto 40px;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.decision-card {
+  background: #18181B;
+  border: 1px solid #292932;
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.decision-card:hover {
+  border-color: #2563EB;
+  background: #1A1A28;
+}
+.decision-card.selected {
+  border-color: #2563EB;
+  background: #0F172A;
+  box-shadow: 0 0 0 1px #2563EB;
+}
+.decision-card h3 {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.decision-card .decision-meta {
+  font-size: 11px;
+  color: #71717A;
+  margin-bottom: 10px;
+}
+.decision-card ul {
+  list-style: none;
+  font-size: 12px;
+  color: #A1A1A8;
+  line-height: 1.8;
+}
+.decision-card ul li::before {
+  content: '· ';
+  color: #2563EB;
+  font-weight: 700;
+}
+.decision-card .select-hint {
+  margin-top: 12px;
+  font-size: 11px;
+  color: #2563EB;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.decision-card:hover .select-hint,
+.decision-card.selected .select-hint {
+  opacity: 1;
+}
+
+/* Mobile preview section */
+.mobile-section {
+  max-width: 1600px;
+  margin: 0 auto 40px;
+  padding: 0 20px;
+}
+.mobile-section h2 {
+  font-size: 24px;
+  font-weight: 900;
+  margin-bottom: 4px;
+  color: #fff;
+}
+.mobile-section .mobile-subtitle {
+  font-size: 13px;
+  color: #71717A;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+.mobile-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.mobile-phone {
+  width: 375px;
+  margin: 0 auto;
+  background: #18181B;
+  border-radius: 24px;
+  border: 2px solid #292932;
+  overflow: hidden;
+}
+.mobile-phone-top {
+  background: #292932;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #71717A;
+  font-size: 10px;
+  gap: 8px;
+}
+.mobile-phone-screen {
+  height: 520px;
+  overflow-y: auto;
+  background: #FAFAFA;
+}
+.mobile-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #fff;
+  border-bottom: 1px solid #F0F0F0;
+}
+.mobile-nav-logo {
+  font-size: 13px;
+  font-weight: 700;
+  color: #09090B;
+}
+.mobile-nav-icon {
+  width: 20px; height: 20px;
+  background: #E5E7EB;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  color: #71717A;
+}
+.mobile-hero {
+  padding: 28px 16px;
+  background: #18191B;
+  text-align: center;
+}
+.mobile-hero-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.2;
+}
+.mobile-hero-sub {
+  font-size: 13px;
+  color: #A1A1A8;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+.mobile-hero-btn {
+  display: inline-flex;
+  padding: 12px 32px;
+  background: #2563EB;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 4px;
+  margin-top: 16px;
+}
+.mobile-stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 24px 16px;
+  background: #fff;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.mobile-stat-num {
+  font-size: 22px;
+  font-weight: 900;
+  color: #09090B;
+}
+.mobile-stat-label {
+  font-size: 9px;
+  color: #71717A;
+  text-transform: uppercase;
+}
+.mobile-products {
+  padding: 24px 16px;
+}
+.mobile-products .mock-section-label {
+  font-size: 10px;
+}
+.mobile-products .mock-section-title {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+.mobile-product-card {
+  display: flex;
+  align-items: center;
+  padding: 14px;
+  background: #fff;
+  border: 1px solid #F0F0F0;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  gap: 12px;
+}
+.mobile-product-thumb {
+  width: 48px; height: 48px;
+  border-radius: 6px;
+  background: #F0F0F0;
+  flex-shrink: 0;
+}
+.mobile-product-info {
+  flex: 1;
+}
+.mobile-product-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #09090B;
+}
+.mobile-product-std {
+  font-size: 11px;
+  color: #A1A1A8;
+}
+.mobile-footer {
+  padding: 24px 16px;
+  background: #09090B;
+  font-size: 11px;
+  color: #71717A;
+  text-align: center;
+  line-height: 1.8;
+}
+
+/* Improved mobile (方案B mobile) */
+.mobile-phone-b .mobile-hero {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.mobile-phone-b .mobile-hero-title {
+  font-size: 28px;
+}
+.mobile-phone-b .mobile-hero-img {
+  width: 100%;
+  height: 160px;
+  background: linear-gradient(135deg, #1E293B, #0F172A);
+  margin-top: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  font-size: 11px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .preview-grid, .decision-panel {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+  }
+  .mobile-preview-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="preview-header">
+  <h1>Desktop 满屏方案 — 视觉对比</h1>
+  <p>选择不同屏幕宽度，观察三种方案在对应分辨率下的表现。左右两边的灰边 = 浪费的空间。</p>
+</div>
+
+<div class="width-controls" id="widthControls">
+  <button class="width-btn active" data-width="1920">1920px 全高清</button>
+  <button class="width-btn" data-width="1440">1440px 设计稿</button>
+  <button class="width-btn" data-width="2560">2560px 2K</button>
+  <button class="width-btn" data-width="3840">3840px 4K</button>
+</div>
+
+<div class="preview-grid" id="previewGrid">
+  <!-- Col 1: Current -->
+  <div class="preview-col">
+    <div class="col-header">
+      <div class="col-label">现状 <span class="col-badge badge-current">方案 0</span></div>
+      <div class="col-desc">1440px 固定<br>scale ≤ 1</div>
+    </div>
+    <div class="viewport" id="vp0">
+      <div class="viewport-width" id="vw0">1920px</div>
+      <div class="viewport-inner scheme-current" style="width:1440px;overflow:hidden;">
+        <div id="site0"></div>
+      </div>
+    </div>
+    <div class="col-notes">
+      <span>1920px 屏上：</span>网站只有 1440px，左右各空 240px（两片灰边）。屏幕越大，灰边越大。
+    </div>
+  </div>
+
+  <!-- Col 2: Scheme A -->
+  <div class="preview-col">
+    <div class="col-header">
+      <div class="col-label">方案 A <span class="col-badge badge-easy">简单放大</span></div>
+      <div class="col-desc">scale 无上限<br>等比填满</div>
+    </div>
+    <div class="viewport" id="vp1">
+      <div class="viewport-width" id="vw1">1920px</div>
+      <div class="viewport-inner scheme-a" style="overflow:hidden;">
+        <div class="mock-app" id="site1"></div>
+      </div>
+    </div>
+    <div class="col-notes">
+      <span>1920px 屏上：</span>scale=1.33 放大，刚好填满。但 <span>4K 屏上字体会变大 2.67 倍</span>，体验差。
+    </div>
+  </div>
+
+  <!-- Col 3: Scheme B -->
+  <div class="preview-col">
+    <div class="col-header">
+      <div class="col-label">方案 B <span class="col-badge badge-pro">真正全宽</span></div>
+      <div class="col-desc">width: 100%<br>内容自动撑满</div>
+    </div>
+    <div class="viewport" id="vp2">
+      <div class="viewport-width" id="vw2">1920px</div>
+      <div class="viewport-inner scheme-b" style="width:100%;overflow:hidden;">
+        <div class="mock-app" id="site2"></div>
+      </div>
+    </div>
+    <div class="col-notes">
+      <span>1920px 屏上：</span>内容流式占满 100%，各区块自适应撑开。任何分辨率都完美。排版优雅大气。
+    </div>
+  </div>
+</div>
+
+<!-- Mobile preview -->
+<div class="mobile-section">
+  <h2>Mobile 手机端 — 独立设计</h2>
+  <p class="mobile-subtitle">可以！手机端用一套完全独立的CSS，不跟桌面端共享缩放逻辑。下面是两个手机端方案的效果：</p>
+  <div class="mobile-preview-grid">
+    <!-- Mobile: current scaled approach -->
+    <div style="text-align:center;">
+      <div style="font-size:12px;color:#71717A;margin-bottom:8px;">方案 A 的手机端 = 桌面缩小版</div>
+      <div class="mobile-phone mobile-phone-a">
+        <div class="mobile-phone-top">375px</div>
+        <div class="mobile-phone-screen">
+          <div style="width:375px;transform-origin:top left;transform:scale(0.26);height:2000px;background:#FAFAFA;">
+            <!-- mini scaled desktop -->
+            <div style="display:flex;height:240px;background:#18191B;">
+              <div style="flex:1;padding:40px;display:flex;flex-direction:column;justify-content:center;gap:12px;">
+                <div style="font-size:9px;color:#71717A;">PRECISION HARDWARE</div>
+                <div style="font-size:32px;color:#fff;font-weight:900;line-height:1.1;">Factory-Direct<br>Fastener<br>Solutions</div>
+                <div style="font-size:12px;color:#A1A1A8;">Trusted by 200+ global buyers in 30+ countries</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:10px;color:#71717A;margin-top:8px;">字体极小，内容拥挤，不适合手指点击</div>
+    </div>
+    <!-- Mobile: independent design -->
+    <div style="text-align:center;">
+      <div style="font-size:12px;color:#2563EB;margin-bottom:8px;">方案 B 的手机端 = 独立移动端设计 ✓</div>
+      <div class="mobile-phone mobile-phone-b">
+        <div class="mobile-phone-top">375px</div>
+        <div class="mobile-phone-screen">
+          <div class="mobile-nav">
+            <div class="mobile-nav-logo" style="display:flex;align-items:center;gap:6px;">
+              <span style="width:5px;height:18px;background:#09090B;border-radius:1px;display:inline-block;"></span>DAKBLE
+            </div>
+            <div class="mobile-nav-icon">☰</div>
+          </div>
+          <div class="mobile-hero" style="text-align:left;">
+            <div class="mobile-hero-title">Factory-Direct<br>Fastener Solutions</div>
+            <div class="mobile-hero-sub">Trusted by 200+ global buyers in 30+ countries</div>
+            <div class="mobile-hero-btn">Get a Quote</div>
+            <div style="width:100%;height:160px;background:linear-gradient(135deg,#1E293B,#0F172A);margin-top:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#475569;font-size:11px;">Fastener Product</div>
+          </div>
+          <div class="mobile-stats">
+            <div style="text-align:center;">
+              <div class="mobile-stat-num">20+</div>
+              <div class="mobile-stat-label">Years</div>
+            </div>
+            <div style="text-align:center;">
+              <div class="mobile-stat-num">200+</div>
+              <div class="mobile-stat-label">Buyers</div>
+            </div>
+            <div style="text-align:center;">
+              <div class="mobile-stat-num">30+</div>
+              <div class="mobile-stat-label">Countries</div>
+            </div>
+          </div>
+          <div class="mobile-products">
+            <div class="mock-section-label">PRODUCTS</div>
+            <div class="mock-section-title">Core Fasteners</div>
+            <div class="mobile-product-card">
+              <div class="mobile-product-thumb"></div>
+              <div class="mobile-product-info">
+                <div class="mobile-product-name">Self-Tapping Screws</div>
+                <div class="mobile-product-std">DIN 7981, DIN 7982</div>
+              </div>
+            </div>
+            <div class="mobile-product-card">
+              <div class="mobile-product-thumb"></div>
+              <div class="mobile-product-info">
+                <div class="mobile-product-name">Machine Screws</div>
+                <div class="mobile-product-std">DIN 7985, DIN 84</div>
+              </div>
+            </div>
+            <div class="mobile-product-card">
+              <div class="mobile-product-thumb"></div>
+              <div class="mobile-product-info">
+                <div class="mobile-product-name">Hex Bolts & Nuts</div>
+                <div class="mobile-product-std">DIN 933, DIN 934</div>
+              </div>
+            </div>
+          </div>
+          <div class="mobile-footer">
+            Dakble Precision Hardware<br>
+            Foshan, Guangdong, China · xavierliangscrew@foxmail.com<br>
+            &copy; 2025 Dakble. All rights reserved.
+          </div>
+        </div>
+      </div>
+      <div style="font-size:10px;color:#2563EB;margin-top:8px;">字体清晰、卡片布局、适合触控、独立设计语言</div>
+    </div>
+  </div>
+</div>
+
+<!-- Decision -->
+<div class="decision-panel" style="margin-top:20px;">
+  <div class="decision-card" onclick="selectScheme('none')" id="card-none">
+    <h3>不修改 · 维持现状</h3>
+    <div class="decision-meta">零改动</div>
+    <ul>
+      <li>桌面最大 1440px</li>
+      <li>大屏左右灰边</li>
+      <li>手机端缩放缩小</li>
+      <li>无风险</li>
+    </ul>
+    <div class="select-hint" id="hint-none">👈 保持现状</div>
+  </div>
+  <div class="decision-card" onclick="selectScheme('a')" id="card-a">
+    <h3>方案 A · 允许等比放大</h3>
+    <div class="decision-meta">改动：1 行 JS | 风险：极低</div>
+    <ul>
+      <li>1920px 正好填满</li>
+      <li>4K 屏字体会变大</li>
+      <li>手机端不动</li>
+      <li>2 分钟改完</li>
+    </ul>
+    <div class="select-hint" id="hint-a">👈 快速解决灰边</div>
+  </div>
+  <div class="decision-card" onclick="selectScheme('b')" id="card-b">
+    <h3>方案 B · 真全宽 + 独立移动端</h3>
+    <div class="decision-meta">改动：大量 CSS + JS | 风险：中等</div>
+    <ul>
+      <li>所有分辨率完美适配</li>
+      <li>桌面端：100% 满宽 + 内容居中</li>
+      <li>手机端：独立设计，触控友好</li>
+      <li>专业企业站体验</li>
+    </ul>
+    <div class="select-hint" id="hint-b">👈 最佳体验</div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:0 20px 60px;color:#71717A;font-size:13px;">
+  点击上方方案卡片选择 → 确认后我动手改代码
+</div>
+
+<script>
+// Site HTML template
+function siteHTML() {
+  return `
+<div class="site-mock">
+  <div class="mock-nav">
+    <div class="mock-nav-logo">DAKBLE</div>
+    <div class="mock-nav-links">
+      <span style="color:#2563EB;font-weight:600;">Home</span>
+      <span>About</span>
+      <span>Products</span>
+      <span>Contact</span>
+    </div>
+  </div>
+  <div class="mock-hero">
+    <div class="mock-hero-text">
+      <div class="mock-hero-tag">PRECISION HARDWARE</div>
+      <div class="mock-hero-title">Factory-Direct<br>Fastener Solutions</div>
+      <div class="mock-hero-sub">Professional manufacturing from Foshan, China. Trusted by 200+ global buyers in 30+ countries.</div>
+      <div class="mock-hero-btn">Request a Quote</div>
+    </div>
+    <div class="mock-hero-img">Fastener Product Image</div>
+  </div>
+  <div class="mock-stats">
+    <div class="mock-stat">
+      <div class="mock-stat-num">20+</div>
+      <div class="mock-stat-label">Years Experience</div>
+    </div>
+    <div class="mock-stat">
+      <div class="mock-stat-num">200+</div>
+      <div class="mock-stat-label">Global Buyers</div>
+    </div>
+    <div class="mock-stat">
+      <div class="mock-stat-num">30+</div>
+      <div class="mock-stat-label">Countries</div>
+    </div>
+    <div class="mock-stat">
+      <div class="mock-stat-num">800+</div>
+      <div class="mock-stat-label">SKU Capacity</div>
+    </div>
+  </div>
+  <div class="mock-section">
+    <div class="mock-section-label">CORE PRODUCTS</div>
+    <div class="mock-section-title">Standard Fastener Catalog</div>
+    <div class="mock-products">
+      <div class="mock-product-row">
+        <div class="mock-product-idx">01</div>
+        <div class="mock-product-name">Self-Tapping Screws</div>
+        <div style="font-size:10px;color:#A1A1A8;">DIN 7981-7983</div>
+        <div class="mock-product-arrow">→</div>
+      </div>
+      <div class="mock-product-row">
+        <div class="mock-product-idx">02</div>
+        <div class="mock-product-name">Machine Screws</div>
+        <div style="font-size:10px;color:#A1A1A8;">DIN 7985</div>
+        <div class="mock-product-arrow">→</div>
+      </div>
+      <div class="mock-product-row">
+        <div class="mock-product-idx">03</div>
+        <div class="mock-product-name">Hex Bolts & Nuts</div>
+        <div style="font-size:10px;color:#A1A1A8;">DIN 933/934</div>
+        <div class="mock-product-arrow">→</div>
+      </div>
+      <div class="mock-product-row">
+        <div class="mock-product-idx">04</div>
+        <div class="mock-product-name">Stainless Steel Washers</div>
+        <div style="font-size:10px;color:#A1A1A8;">DIN 125-127</div>
+        <div class="mock-product-arrow">→</div>
+      </div>
+    </div>
+  </div>
+  <div class="mock-footer">
+    <div>Dakble Precision Hardware</div>
+    <div>Foshan, Guangdong, China · xavierliangscrew@foxmail.com</div>
+    <div>&copy; 2025 Dakble. All rights reserved.</div>
+  </div>
+</div>`;
+}
+
+// Inject site HTML
+var html = siteHTML();
+document.getElementById('site0').innerHTML = html;
+document.getElementById('site1').innerHTML = html;
+document.getElementById('site2').innerHTML = html;
+
+// Width switching
+var currentWidth = 1920;
+var vp0 = document.getElementById('vp0');
+var vp1 = document.getElementById('vp1');
+var vp2 = document.getElementById('vp2');
+
+document.querySelectorAll('.width-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.width-btn').forEach(function(b) { b.classList.remove('active'); });
+    this.classList.add('active');
+    setWidth(parseInt(this.dataset.width));
+  });
+});
+
+function setWidth(w) {
+  currentWidth = w;
+  // Viewport widths (col 0 = current, col 1/2 = schemes get the full width)
+  vp0.style.width = w + 'px';
+  vp1.style.width = w + 'px';
+  vp2.style.width = w + 'px';
+
+  // Update width badges
+  document.getElementById('vw0').textContent = w + 'px';
+  document.getElementById('vw1').textContent = w + 'px';
+  document.getElementById('vw2').textContent = w + 'px';
+
+  // Scheme A: calculate scale
+  var sa = w / 1440;
+  document.getElementById('site1').style.setProperty('--sa', sa);
+
+  // Update notes
+  updateNotes(w);
+}
+
+function updateNotes(w) {
+  // Col 0 notes
+  var sideGap = w > 1440 ? Math.round((w - 1440) / 2) : 0;
+  var notes0 = document.querySelectorAll('.col-notes')[0];
+  if (sideGap > 0) {
+    notes0.innerHTML = '<span>' + w + 'px 屏上：</span>网站只有 1440px，左右各空 <span>' + sideGap + 'px</span>（两片灰边）。屏幕越大，灰边越大。';
+  } else {
+    notes0.innerHTML = '<span>' + w + 'px 屏上：</span>屏幕 ≤ 1440px，JS 自动缩小适配。';
+  }
+
+  // Col 1 notes
+  var sa = (w / 1440).toFixed(2);
+  var notes1 = document.querySelectorAll('.col-notes')[1];
+  if (w <= 1440) {
+    notes1.innerHTML = '<span>' + w + 'px 屏上：</span>同现状，scale 自动缩小适配。';
+  } else if (w <= 2560) {
+    notes1.innerHTML = '<span>' + w + 'px 屏上：</span>scale=' + sa + ' 放大，刚好填满。观感正常。';
+  } else {
+    notes1.innerHTML = '<span>' + w + 'px 屏上：</span>scale=' + sa + ' 放大，<span>字体变为设计稿的 ' + sa + ' 倍</span>，会过大。';
+  }
+
+  // Col 2 notes
+  var notes2 = document.querySelectorAll('.col-notes')[2];
+  notes2.innerHTML = '<span>' + w + 'px 屏上：</span>内容流式占满 100%，各区块自适应撑开。任何分辨率都完美。排版优雅大气。';
+}
+
+// Initial render
+setWidth(1920);
+
+// Selection
+function selectScheme(s) {
+  document.querySelectorAll('.decision-card').forEach(function(c) { c.classList.remove('selected'); });
+  var card = document.getElementById('card-' + s);
+  if (card) card.classList.add('selected');
+}
+</script>
+</body>
+</html>
